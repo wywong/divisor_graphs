@@ -33,18 +33,38 @@
                 .attr("d", arc);
 
             const pointTheta = tau / n;
+            const offset = -Math.PI / 2;
+
+            // compute the locations of the points
+            const points = []
             for (let i = 0; i < n; i++) {
-                drawPoint(g, i, pointTheta);
+                const x = centreRadius * Math.cos(pointTheta * i + offset);
+                const y = centreRadius * Math.sin(pointTheta * i + offset);
+                points.push([x, y]);
+            }
+
+            // compute and draw edges
+            for (let i = 0; i < n; i++) {
+                const start = i;
+                const end = (i * 10) % n;
+                const x1 = points[start][0];
+                const y1 = points[start][1];
+                const x2 = points[end][0];
+                const y2 = points[end][1];
+                drawEdge(g, x1, y1, x2, y2);
+            }
+
+            for (let i = 0; i < n; i++) {
+                const x = points[i][0];
+                const y = points[i][1];
+                drawPoint(g, i, x, y);
             }
 
             // Append the SVG element.
             container.append(svg.node());
         }
 
-        function drawPoint(g, i, pointTheta) {
-            const offset = -Math.PI / 2;
-            const x = centreRadius * Math.cos(pointTheta * i + offset);
-            const y = centreRadius * Math.sin(pointTheta * i + offset);
+        function drawPoint(g, i, x, y) {
             g.append("circle")
              .attr("r", 20)
              .attr("fill", "#87CEEB")
@@ -54,7 +74,18 @@
              .attr("x", x - 5)
              .attr("y", y + 5)
              .attr("fill", "black")
+             .attr("style", "font-weight: bold;")
              .text(i)
+        }
+
+        function drawEdge(g, x1, y1, x2, y2) {
+            g.append("line")
+             .attr("x1", x1)
+             .attr("y1", y1)
+             .attr("x2", x2)
+             .attr("y2", y2)
+             .attr("stroke-width", 2)
+             .attr("stroke", "black");
         }
 
         document.getElementById("update").addEventListener("click", () => {
