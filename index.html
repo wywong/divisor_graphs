@@ -19,6 +19,19 @@
                 .attr("width", width)
                 .attr("height", height);
 
+            svg.append("svg:defs")
+               .append("svg:marker")
+               .attr("id", "triangle")
+               .attr("refX", 13)
+               .attr("refY", 5)
+               .attr("markerWidth", 30)
+               .attr("markerHeight", 30)
+               .attr("markerUnits","userSpaceOnUse")
+               .attr("orient", "auto")
+               .append("path")
+               .attr("d", "M 0 0 12 6 0 12 3 6")
+               .style("fill", "black");
+
             const g = svg.append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -78,12 +91,22 @@
              .text(i)
         }
 
-        function drawEdge(g, x1, y1, x2, y2) {
+        function drawEdge(g, startX, startY, endX, endY) {
+            const midX = (endX + startX) / 2
+            const midY = (endY + startY) / 2
             g.append("line")
-             .attr("x1", x1)
-             .attr("y1", y1)
-             .attr("x2", x2)
-             .attr("y2", y2)
+             .attr("x1", startX)
+             .attr("y1", startY)
+             .attr("x2", midX)
+             .attr("y2", midY)
+             .attr("stroke-width", 2)
+             .attr("stroke", "black")
+             .attr("marker-end", "url(#triangle)");
+            g.append("line")
+             .attr("x1", midX)
+             .attr("y1", midY)
+             .attr("x2", endX)
+             .attr("y2", endY)
              .attr("stroke-width", 2)
              .attr("stroke", "black");
         }
