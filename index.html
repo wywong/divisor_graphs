@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+    <script type="module">
+        import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+        const tau = 2 * Math.PI;
+        const width = 600;
+        const height = 600;
+        const outerRadius = (height - 20) / 2;
+        const innerRadius = outerRadius - 10;
+        const centreRadius = (outerRadius + innerRadius) / 2;
+
+        function drawDivisionGraph(n) {
+            container.innerHTML = "";
+
+            // Declare the chart dimensions and margins.
+
+            // Create the SVG container.
+            const svg = d3.create("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const g = svg.append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+            const arc = d3.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(outerRadius)
+                .startAngle(0);
+
+            const background = g.append("path")
+                .datum({endAngle: tau})
+                .style("fill", "#ddd")
+                .attr("d", arc);
+
+            // Append the SVG element.
+            container.append(svg.node());
+        }
+
+        document.getElementById("update").addEventListener("click", () => {
+            const divisor = parseInt(document.getElementById("divisor").value);
+
+            drawDivisionGraph(divisor);
+        });
+    </script>
+</head>
+<body>
+    <input id="divisor" placeholder="Divisor" type=number>
+    <button id="update">Update</button>
+    <div id="container"></div>
+</body>
